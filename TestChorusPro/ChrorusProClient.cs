@@ -27,7 +27,7 @@ namespace TestChorusPro
 
         // Login and password for technical account Chorus Pro
         private static string CPRO_TECH_LOGIN   = "TECH_1_1234567890@cpro.fr";
-        private static string CPRO_TECH_PASS    = "passwors1234";
+        private static string CPRO_TECH_PASS    = "password1234";
 
         private string CPRO_TECH_ACCOUNT_ENCODED = "";
 
