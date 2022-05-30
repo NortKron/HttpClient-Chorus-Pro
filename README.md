@@ -1,5 +1,5 @@
 # HttpClient-Chorus-Pro
-Http-Client prototype for submitting invoices to the portal Chorus Pro
+Http-Client prototype for submitting invoices to the portal [Chorus Pro](https://portail.chorus-pro.gouv.fr/aife_csm/?id=aife_index)
 
 The console program does the following steps
 1. Receives a access token
