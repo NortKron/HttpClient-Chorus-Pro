@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace TestChorusPro
@@ -6,11 +7,19 @@ namespace TestChorusPro
     class Program
     {
         private static string SMB_DELIMITER = "|";
+        
+        public static List<string> listFiles = new()
+        {
+            "C:\\Users\\Admin\\source\\repos\\TestChorusPro\\Sample Invoices\\FTI_test_UBL_FR.xml",
+            "C:\\Users\\Admin\\source\\repos\\TestChorusPro\\Sample Invoices\\FTI_test_UBL_FR_01.xml",
+            "C:\\Users\\Admin\\source\\repos\\TestChorusPro\\Sample Invoices\\out.Admin_01.xml",
+            "C:\\Users\\Admin\\source\\repos\\TestChorusPro\\Sample Invoices\\out.Admin_02.xml",
 
+            "C:\\Users\\Admin\\source\\repos\\TestChorusPro\\Sample Invoices\\out.Admin_SalesCreditNote_FR01.xml"
+        };
+        
         static void Main(string[] args)
         {
-            string pathFileXML = "C:\\Users\\Admin\\source\\repos\\TestChorusPro\\Sample Invoices\\out.Admin_02.xml"
-
             Console.WriteLine("0. Start");
 
             ChrorusProClient client = new ChrorusProClient();
@@ -18,9 +27,15 @@ namespace TestChorusPro
 
             Console.WriteLine("1. Token : " + token.AccessToken);
 
-            FlowDeposit flow = client.SubmitUBL(token, pathFileXML);
+            FlowDeposit flow = client.SubmitUBL(token, listFiles[0]);
 
-            Console.WriteLine($"2. Invoice sent. Flow Deposit number : {flow.NumeroFluxDepot}");
+            if (flow.CodeRetour > 0)
+            {
+                Console.WriteLine($"2. CodeRetour : {flow.CodeRetour}\nDescription : {flow.Libelle}");
+                return;
+            }
+
+            Console.WriteLine($"2. Invoice sent. \nFlow Deposit number : {flow.NumeroFluxDepot}\nSyntaxeFlux : {flow.SyntaxeFlux}");
 
             Console.WriteLine("Sleep on 30 seconds");
             Thread.Sleep(30000);
@@ -29,7 +44,7 @@ namespace TestChorusPro
 
             while (detail.CodeRetour != 0)
             {
-                Console.WriteLine("Stream not found. Retry after 30 seconds");
+                Console.WriteLine($"\nCodeRetour : {detail.CodeRetour}\nDescription : {detail.Libelle}\nRetry after 30 seconds");
                 Thread.Sleep(30000);
 
                 detail = client.CheckUBL(flow, token);
